@@ -90,7 +90,7 @@ class OnBoardingInformationBox extends StatelessWidget {
             ),
           ),
           Container(
-            width: double.infinity,
+            width: 500,
             height: 300,
             child: Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
