@@ -929,7 +929,7 @@ class _ResultWidgetState extends State<ResultWidget>
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         16, 12, 0, 0),
                                     child: Text(
-                                        'Konzentrationsverlauf über Stunden nach Gabe',
+                                        'Konzentrationsverlauf (ng/ml) über die Stunden nach Gabe',
                                         style: headerStyle),
                                   ),
                                   Padding(

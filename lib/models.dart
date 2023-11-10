@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:talspiegel/own_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'onboarding_screen.dart';
+import 'asset_player.dart';
 
 class Medication {
   String name;
@@ -75,57 +76,65 @@ class OnBoardingInformationBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
-            child: Text(
-              title,
-              style: styleHeader,
-            ),
-          ),
-          Container(
-            width: 500,
-            height: 300,
-            child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.black.withOpacity(0.3),
+    return Center(
+      child: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 12),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Center(
+                  child: Text(
+                    title,
+                    style: styleHeader,
                   ),
+                ),
+              ),
+              Center(
+                child: Container(
+                  width: 500,
+                  height: 300,
                   child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Image.asset(
-                      imagePath,
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.scaleDown,
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.black.withOpacity(0.3),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Image.asset(
+                            imagePath,
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.scaleDown,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
+                  child: Text(
+                    description,
+                    style: styleText,
+                  ),
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 0),
-            child: Text(
-              description,
-              style: styleText,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -210,6 +219,83 @@ class OnBoardingInformationBoxWithTwoImages extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class OnBoardingVideoBox extends StatelessWidget {
+  final String title;
+  final String description;
+  final String videoPath;
+
+  OnBoardingVideoBox({
+    required this.title,
+    required this.description,
+    required this.videoPath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(12, 40, 12, 0),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                child: Text(
+                  title,
+                  style: styleHeader,
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              Center(
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(0),
+                    child: Center(
+                      child: Container(
+                        width: double.infinity,
+                        height: 300,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.black.withOpacity(0.3),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: AssetPlayerWidget(asset: videoPath),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(6, 0, 6, 0),
+                  child: Text(description, style: styleText),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -458,7 +544,9 @@ class CustomAppBar extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => OnboardingWidget(),
+                              builder: (context) => OnboardingWidget(
+                                scrollviewpage: 7,
+                              ),
                             ));
                       },
                       child: Text('Ja', style: TextStyle(color: Colors.black)),

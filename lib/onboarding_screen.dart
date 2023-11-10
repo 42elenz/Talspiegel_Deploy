@@ -7,7 +7,9 @@ import 'asset_player.dart';
 import 'models.dart';
 
 class OnboardingWidget extends StatefulWidget {
-  const OnboardingWidget({Key? key}) : super(key: key);
+  final int scrollviewpage;
+
+  const OnboardingWidget({Key? key, this.scrollviewpage = 0}) : super(key: key);
 
   @override
   _OnboardingWidgetState createState() => _OnboardingWidgetState();
@@ -32,8 +34,10 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    PageController pageController =
-        PageController(initialPage: currentPageIndex);
+    PageController pageController = PageController(
+        initialPage: (widget.scrollviewpage != 0)
+            ? widget.scrollviewpage
+            : currentPageIndex);
     return GestureDetector(
       onTap: () => {
         if (FocusScope.of(context).hasPrimaryFocus)
@@ -73,65 +77,71 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    12, 78, 12, 12),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      height: 300,
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 0, 12),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Colors.white,
-                                                width: 2,
+                                    12, 140, 12, 12),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        height: 300,
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 0, 12),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.white,
+                                                  width: 2,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                color: Colors.black
+                                                    .withOpacity(0.3),
                                               ),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              color:
-                                                  Colors.black.withOpacity(0.3),
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(15.0),
-                                              child: Image.asset(
-                                                'assets/icon.png',
-                                                width: double.infinity,
-                                                height: 300,
-                                                fit: BoxFit.scaleDown,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(15.0),
+                                                child: Image.asset(
+                                                  'assets/icon.png',
+                                                  width: double.infinity,
+                                                  height: 300,
+                                                  fit: BoxFit.scaleDown,
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          12, 0, 0, 0),
-                                      child: Text(
-                                          'Talspiegelberechnung von Medikamenten',
-                                          style: styleHeader),
-                                    ),
-                                    Padding(
+                                      Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            12, 4, 12, 0),
+                                            12, 0, 0, 0),
                                         child: Text(
-                                          'Nicht zur medizinischen Diagnostik geeignet!\n',
-                                          style: styleText,
-                                        )),
-                                  ],
+                                            'Talspiegelberechnung von Medikamenten',
+                                            style: styleHeader),
+                                      ),
+                                      Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  12, 4, 12, 0),
+                                          child: Text(
+                                            'Nicht zur medizinischen Diagnostik geeignet!\n',
+                                            style: styleText,
+                                          )),
+                                    ],
+                                  ),
                                 ),
                               ),
                               OnBoardingInformationBox(
-                                  title: "Medikamentenauswahl",
+                                  title:
+                                      "Medikamenten und Substanzklassenauswahl",
                                   description:
                                       "Wählen Sie ein Medikament aus der Liste. Halbwertszeit und Verabreichungsintervall werden automatisch ausgefüllt, können aber manuell angepasst werden.",
                                   imagePath: 'assets/Auswahl_Substanz.png'),
@@ -153,186 +163,21 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                   description:
                                       'Zeitauswahl für die Medikamentenverbreichung und Spiegelabnahme. Die Gabe MUSS vor der Abnahme liegen.\n',
                                   imagePath: 'assets/Zeiten.png'),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    12, 0, 12, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 12),
-                                      child: Text(
-                                        'Zeiteneingabefeld',
-                                        style: styleHeader,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 12),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(0),
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 300,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                color: Colors.black
-                                                    .withOpacity(0.3),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(15.0),
-                                                child: AssetPlayerWidget(
-                                                    asset:
-                                                        'assets/Zeitenauswahl.mp4'),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          6, 0, 6, 0),
-                                      child: Text(
-                                          'Darstellung der Zeitenauswahl. Die Medikamentengabe sollte VOR der Spiegelabnahme liegen\n',
-                                          style: styleText),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    12, 0, 12, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 12),
-                                      child: Text(
-                                        'Ergebnisscreen',
-                                        style: styleHeader,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 12),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(0),
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 300,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                color: Colors.black
-                                                    .withOpacity(0.3),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(15.0),
-                                                child: AssetPlayerWidget(
-                                                    asset:
-                                                        'assets/Ergebnisscreen.mp4'),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          6, 0, 6, 0),
-                                      child: Text(
-                                          'Darstellung des Endscreens. Dieser reagiert auf Neueingaben.\n',
-                                          style: styleText),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    12, 0, 12, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 12),
-                                      child: Text(
-                                        'Gesamt-Tutorial-Video',
-                                        style: styleHeader,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 12),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(0),
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 300,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                color: Colors.black
-                                                    .withOpacity(0.3),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(15.0),
-                                                child: AssetPlayerWidget(
-                                                    asset:
-                                                        'assets/tutorial.mp4'),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          6, 0, 6, 0),
-                                      child: Text(
-                                          'Gesamter-Workflow bis zum Talspiegel\n\n',
-                                          style: styleText),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              OnBoardingVideoBox(
+                                  title: 'Zeiteneingabefeld',
+                                  description:
+                                      'Darstellung der Zeitenauswahl. Die Medikamentengabe sollte VOR der Spiegelabnahme liegen',
+                                  videoPath: 'assets/Zeitenauswahl.mp4'),
+                              OnBoardingVideoBox(
+                                  title: 'Ergebnisscreen',
+                                  description:
+                                      'Darstellung des Endscreens. Dieser reagiert auf Neueingaben.\n',
+                                  videoPath: 'assets/Ergebnisscreen.mp4'),
+                              OnBoardingVideoBox(
+                                  title: 'Gesamt-Tutorial-Video',
+                                  description:
+                                      'Gesamter-Workflow bis zum Talspiegel\n',
+                                  videoPath: 'assets/tutorial.mp4'),
                             ],
                           ),
                         ),
