@@ -442,758 +442,780 @@ class _ResultWidgetState extends State<ResultWidget>
           body: SafeArea(
             top: true,
             child: SingleChildScrollView(
-              child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Falls nötig anpassen',
-                            style: importanthintStyle,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(42.5, 10, 42.5, 5),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: textfield_gabe,
-                              keyboardType: TextInputType.none,
-                              onChanged: (value) {
-                                calculateLineChartData();
-                                calculateMinMax();
-                                calculateAndUpdate();
-                              },
-                              onTap: () async {
-                                final date = await showDatePicker(
-                                  context: context,
-                                  helpText: 'Medikationsgabe',
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime.now()
-                                      .subtract(const Duration(days: 30)),
-                                  lastDate: DateTime.now()
-                                      .add(const Duration(days: 30)),
-                                );
-                                if (date == null)
-                                  return; // user cancels date selection
-                                final time = await showTimePicker(
-                                  helpText: 'Medikationsgabe',
-                                  context: context,
-                                  initialTime: TimeOfDay.now(),
-                                );
-                                if (time == null)
-                                  return; // user cancels time selection
-                                final dateTime = DateTime(date.year, date.month,
-                                    date.day, time.hour, time.minute);
-                                setState(() {
-                                  gabe = dateTime;
-                                  if (dateTime.compareTo(abnahme) > 0) {
-                                    textfield_gabe.text =
-                                        DateFormat('dd/MM-kk:mm')
-                                            .format(dateTime);
-                                    setState(() {
-                                      _gabeError = "Chronologie beachten!";
-                                    });
-                                    return;
-                                  }
-                                  textfield_gabe.text =
-                                      DateFormat('dd/MM-kk:mm')
-                                          .format(dateTime);
-                                  setState(() {
-                                    _gabeError = null;
-                                    _abnahmeError = null;
-                                    calculateLineChartData();
-                                    calculateMinMax();
-                                    calculateAndUpdate();
-                                  });
-                                });
-                              },
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.transparent,
-                                  suffixIcon: createInfoIconButton(
-                                      "Medikationsgabe",
-                                      "Tragen Sie hier den Zeitpunkt der Medikationsgabe ein! Die Medikationsgabe muss zeitlich VOR der Spiegelabnahme liegen. Achtung: Nutzen Sie in der Webversion das Mausrad oder Trackpad!",
-                                      context),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: textfield_gabe.text.isEmpty
-                                          ? borderSideColor
-                                          : borderColorFilled,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: focusBorderSideColor,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: errorBorderSideColor,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: errorBorderSideColor,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  label: Text('Medikationsgabe-Zeitpunkt',
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.black)),
-                                  errorText: _gabeError,
-                                  errorStyle:
-                                      const TextStyle(color: Colors.red)),
-                              style: TextStyle(fontSize: 15),
-                              textAlign: TextAlign.center,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(42.5, 10, 42.5, 5),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: TextFormField(
-                              controller: textfield_abn,
-                              keyboardType: TextInputType.none,
-                              onChanged: (value) {
-                                calculateLineChartData();
-                                calculateMinMax();
-                                calculateAndUpdate();
-                              },
-                              onTap: () async {
-                                final date = await showDatePicker(
-                                  context: context,
-                                  helpText: 'Spiegelabnahme',
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                );
-                                if (date == null)
-                                  return; // user cancels date selection
-                                final time = await showTimePicker(
-                                  helpText: 'Spiegelabnahme',
-                                  context: context,
-                                  initialTime: TimeOfDay.now(),
-                                );
-                                if (time == null)
-                                  return; // user cancels time selection
-                                final dateTime = DateTime(date.year, date.month,
-                                    date.day, time.hour, time.minute);
-                                setState(() {
-                                  abnahme = dateTime;
-                                  if (gabe.compareTo(abnahme) > 0) {
-                                    textfield_abn.text =
-                                        DateFormat('dd/MM-kk:mm')
-                                            .format(dateTime);
-                                    setState(() {
-                                      _abnahmeError = "Chronologie beachten!";
-                                    });
-                                    return;
-                                  }
-                                  textfield_abn.text = DateFormat('dd/MM-kk:mm')
-                                      .format(dateTime);
-                                  setState(() {
-                                    _abnahmeError = null;
-                                    _gabeError = null;
-                                    abnahme = dateTime;
-                                    calculateLineChartData();
-                                    calculateMinMax();
-                                    calculateAndUpdate();
-                                  });
-                                });
-                              },
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.transparent,
-                                  suffixIcon: createInfoIconButton(
-                                      "Spiegelabnahme-Zeitpunkt",
-                                      "Tragen Sie hier den Zeitpunkt der Spiegelabnahme ein! Die Spiegelabnahme muss zeitlich NACH der Medikationsgabe liegen. Achtung: Nutzen Sie in der Webversion das Mausrad oder Trackpad!",
-                                      context),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: textfield_gabe.text.isEmpty
-                                          ? borderSideColor
-                                          : borderColorFilled,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: focusBorderSideColor,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: errorBorderSideColor,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: errorBorderSideColor,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  label: Text("Spiegelabnahme-Zeitpunkt",
-                                      style: const TextStyle(
-                                          fontSize: 15,
-                                          color: Color.fromARGB(255, 0, 0, 0))),
-                                  errorText: _abnahmeError,
-                                  errorStyle:
-                                      const TextStyle(color: Colors.red)),
-                              style: TextStyle(fontSize: 15),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
+              child: Center(
+                child: SizedBox(
+                  width: 800,
+                  child: Column(
                       mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(42, 10, 42, 5),
-                            child: CustomTextInputField(
-                              controller: widget.textfield_dosis,
-                              labelText: 'Dosis',
-                              hintText: 'in mg',
-                              suffixText: 'mg',
-                              infoText: "Dosis des Medikaments in mg.",
-                              onChanged: (p0) => setState(() {}),
-                              maxLength: 8,
-                              regExp: floatingRegeEp,
-                            ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Falls nötig anpassen',
+                                style: importanthintStyle,
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                    SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(0, 0.2),
-                        end: Offset.zero,
-                      ).animate(_animationcontroller),
-                      child: FadeTransition(
-                        opacity: _animationcontroller,
-                        child: Padding(
+                        Padding(
                           padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 3,
-                                  color: Color(0x33000000),
-                                  offset: Offset(0, 1),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 0, 12, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  16, 12, 12, 0),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'Talspiegel',
-                                                style: headerStyle,
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 4, 0, 0),
-                                                child: Text(
-                                                    'Spiegel kurz vor erneuter Gabe',
-                                                    style: hintStyle),
-                                              ),
-                                            ],
-                                          ),
+                              EdgeInsetsDirectional.fromSTEB(42.5, 10, 42.5, 5),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller: textfield_gabe,
+                                  keyboardType: TextInputType.none,
+                                  onChanged: (value) {
+                                    calculateLineChartData();
+                                    calculateMinMax();
+                                    calculateAndUpdate();
+                                  },
+                                  onTap: () async {
+                                    final date = await showDatePicker(
+                                      context: context,
+                                      helpText: 'Medikationsgabe',
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime.now()
+                                          .subtract(const Duration(days: 30)),
+                                      lastDate: DateTime.now()
+                                          .add(const Duration(days: 30)),
+                                    );
+                                    if (date == null)
+                                      return; // user cancels date selection
+                                    final time = await showTimePicker(
+                                      helpText: 'Medikationsgabe',
+                                      context: context,
+                                      initialTime: TimeOfDay.now(),
+                                    );
+                                    if (time == null)
+                                      return; // user cancels time selection
+                                    final dateTime = DateTime(
+                                        date.year,
+                                        date.month,
+                                        date.day,
+                                        time.hour,
+                                        time.minute);
+                                    setState(() {
+                                      gabe = dateTime;
+                                      if (dateTime.compareTo(abnahme) > 0) {
+                                        textfield_gabe.text =
+                                            DateFormat('dd/MM-kk:mm')
+                                                .format(dateTime);
+                                        setState(() {
+                                          _gabeError = "Chronologie beachten!";
+                                        });
+                                        return;
+                                      }
+                                      textfield_gabe.text =
+                                          DateFormat('dd/MM-kk:mm')
+                                              .format(dateTime);
+                                      setState(() {
+                                        _gabeError = null;
+                                        _abnahmeError = null;
+                                        calculateLineChartData();
+                                        calculateMinMax();
+                                        calculateAndUpdate();
+                                      });
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.transparent,
+                                      suffixIcon: createInfoIconButton(
+                                          "Medikationsgabe",
+                                          "Tragen Sie hier den Zeitpunkt der Medikationsgabe ein! Die Medikationsgabe muss zeitlich VOR der Spiegelabnahme liegen. Achtung: Nutzen Sie in der Webversion das Mausrad oder Trackpad!",
+                                          context),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: textfield_gabe.text.isEmpty
+                                              ? borderSideColor
+                                              : borderColorFilled,
+                                          width: 2,
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  16, 12, 0, 12),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                calculatedTalspiegel,
-                                                style: contentStyle,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                        borderRadius: BorderRadius.circular(8),
                                       ),
-                                    ],
-                                  ),
-                                ],
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: focusBorderSideColor,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: errorBorderSideColor,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: errorBorderSideColor,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      label: Text('Medikationsgabe-Zeitpunkt',
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.black)),
+                                      errorText: _gabeError,
+                                      errorStyle:
+                                          const TextStyle(color: Colors.red)),
+                                  style: TextStyle(fontSize: 15),
+                                  textAlign: TextAlign.center,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(42.5, 10, 42.5, 5),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: TextFormField(
+                                  controller: textfield_abn,
+                                  keyboardType: TextInputType.none,
+                                  onChanged: (value) {
+                                    calculateLineChartData();
+                                    calculateMinMax();
+                                    calculateAndUpdate();
+                                  },
+                                  onTap: () async {
+                                    final date = await showDatePicker(
+                                      context: context,
+                                      helpText: 'Spiegelabnahme',
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2000),
+                                      lastDate: DateTime(2100),
+                                    );
+                                    if (date == null)
+                                      return; // user cancels date selection
+                                    final time = await showTimePicker(
+                                      helpText: 'Spiegelabnahme',
+                                      context: context,
+                                      initialTime: TimeOfDay.now(),
+                                    );
+                                    if (time == null)
+                                      return; // user cancels time selection
+                                    final dateTime = DateTime(
+                                        date.year,
+                                        date.month,
+                                        date.day,
+                                        time.hour,
+                                        time.minute);
+                                    setState(() {
+                                      abnahme = dateTime;
+                                      if (gabe.compareTo(abnahme) > 0) {
+                                        textfield_abn.text =
+                                            DateFormat('dd/MM-kk:mm')
+                                                .format(dateTime);
+                                        setState(() {
+                                          _abnahmeError =
+                                              "Chronologie beachten!";
+                                        });
+                                        return;
+                                      }
+                                      textfield_abn.text =
+                                          DateFormat('dd/MM-kk:mm')
+                                              .format(dateTime);
+                                      setState(() {
+                                        _abnahmeError = null;
+                                        _gabeError = null;
+                                        abnahme = dateTime;
+                                        calculateLineChartData();
+                                        calculateMinMax();
+                                        calculateAndUpdate();
+                                      });
+                                    });
+                                  },
+                                  decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.transparent,
+                                      suffixIcon: createInfoIconButton(
+                                          "Spiegelabnahme-Zeitpunkt",
+                                          "Tragen Sie hier den Zeitpunkt der Spiegelabnahme ein! Die Spiegelabnahme muss zeitlich NACH der Medikationsgabe liegen. Achtung: Nutzen Sie in der Webversion das Mausrad oder Trackpad!",
+                                          context),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: textfield_gabe.text.isEmpty
+                                              ? borderSideColor
+                                              : borderColorFilled,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: focusBorderSideColor,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: errorBorderSideColor,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: errorBorderSideColor,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      label: Text("Spiegelabnahme-Zeitpunkt",
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              color: Color.fromARGB(
+                                                  255, 0, 0, 0))),
+                                      errorText: _abnahmeError,
+                                      errorStyle:
+                                          const TextStyle(color: Colors.red)),
+                                  style: TextStyle(fontSize: 15),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    42, 10, 42, 5),
+                                child: CustomTextInputField(
+                                  controller: widget.textfield_dosis,
+                                  labelText: 'Dosis',
+                                  hintText: 'in mg',
+                                  suffixText: 'mg',
+                                  infoText: "Dosis des Medikaments in mg.",
+                                  onChanged: (p0) => setState(() {}),
+                                  maxLength: 8,
+                                  regExp: floatingRegeEp,
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ),
-                    ),
-                    SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(0, 0.4),
-                        end: Offset.zero,
-                      ).animate(_animationcontroller),
-                      child: FadeTransition(
-                        opacity: _animationcontroller,
-                        child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 3,
-                                  color: Color(0x33000000),
-                                  offset: Offset(0, 1),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                        SlideTransition(
+                          position: Tween<Offset>(
+                            begin: Offset(0, 0.2),
+                            end: Offset.zero,
+                          ).animate(_animationcontroller),
+                          child: FadeTransition(
+                            opacity: _animationcontroller,
                             child: Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 0, 12, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  16, 12, 12, 0),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'Steady State',
-                                                style: headerStyle,
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 4, 0, 0),
-                                                child: Text(
-                                                  'Steady state erreicht nach',
-                                                  style: hintStyle,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Row(
+                                  EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 3,
+                                      color: Color(0x33000000),
+                                      offset: Offset(0, 1),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 8),
+                                  child: Column(
                                     mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  16, 12, 0, 12),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(duration(),
-                                                  style: contentStyle),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 4, 0, 0),
-                                                child: Text(
-                                                    'Hinweis: Das Medikament sollte min. 5 HWZ eingenommen worden sein.',
-                                                    style: labelStyle),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(0, 0.6),
-                        end: Offset.zero,
-                      ).animate(_animationcontroller),
-                      child: FadeTransition(
-                        opacity: _animationcontroller,
-                        child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 3,
-                                  color: Color(0x33000000),
-                                  offset: Offset(0, 1),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 0, 12, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    16, 12, 12, 0),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  'Gabe-Spiegel-Differenz',
-                                                  style: headerStyle,
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 4, 0, 0),
-                                                  child: Text(
-                                                    'Stunden zwischen Einnahme und Spiegelbestimmung ',
-                                                    style: hintStyle,
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 12, 0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 12, 12, 0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Talspiegel',
+                                                    style: headerStyle,
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  16, 12, 0, 12),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(differenz + 'h',
-                                                  style: contentStyle),
-                                              Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 4, 0, 0),
-                                                  child: Text(
-                                                    (int.tryParse(differenz) ??
-                                                                0) >
-                                                            (verabreichungsintervall)
-                                                        ? "Achtung, die Zeitspanne zwischen Medikationsgabe und Spiegelabnahme ist größer gewählt, als das Verabreichungsintervall von ${widget.textfield_intervall.text}! Bitte kontrollieren!"
-                                                        : "Das festgelegte Verabreichungsintervall beträgt ${widget.textfield_intervall.text}",
-                                                    style: (int.tryParse(
-                                                                    differenz) ??
-                                                                0) >
-                                                            (verabreichungsintervall)
-                                                        ? importantlabelStyle
-                                                        : labelStyle,
-                                                  )),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(0, 0.8),
-                        end: Offset.zero,
-                      ).animate(_animationcontroller),
-                      child: FadeTransition(
-                        opacity: _animationcontroller,
-                        child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 12, 16, 16),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 3,
-                                  color: Color(0x33000000),
-                                  offset: Offset(0, 1),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        16, 12, 0, 0),
-                                    child: Text(
-                                        'Konzentrationsverlauf über Stunden nach Gabe',
-                                        style: headerStyle),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        16, 4, 16, 0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    8, 0, 12, 10),
-                                            child: Wrap(
-                                              spacing: 8,
-                                              runSpacing: 4,
-                                              children: [
-                                                IconTextRow(
-                                                  iconColor: Colors.black,
-                                                  text: 'Spiegelabnahme',
-                                                ),
-                                                IconTextRow(
-                                                  iconColor: Colors.red,
-                                                  text: 'Talspiegel',
-                                                ),
-                                                IconTextRow(
-                                                  iconColor: Color.fromARGB(
-                                                      255, 247, 161, 3),
-                                                  text:
-                                                      'Maximales Verteilungsvolumen',
-                                                  icon: Icons.circle,
-                                                ),
-                                                IconTextRow(
-                                                  iconColor: Colors.blue,
-                                                  text:
-                                                      'Mittleres Verteilungsvolumen',
-                                                  icon: Icons.circle,
-                                                ),
-                                                IconTextRow(
-                                                  iconColor:
-                                                      const Color.fromARGB(
-                                                          255, 50, 114, 52),
-                                                  text:
-                                                      'Minimales Verteilungsvolumen',
-                                                  icon: Icons.circle,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        16, 16, 16, 0),
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 200,
-                                      child: LineChart(LineChartData(
-                                        lineTouchData: LineTouchData(
-                                            touchTooltipData:
-                                                LineTouchTooltipData(
-                                                    tooltipBgColor:
-                                                        Colors.white)),
-                                        extraLinesData: ExtraLinesData(
-                                          verticalLines: [
-                                            VerticalLine(
-                                              x: verabreichungsintervall,
-                                              color: Colors.red,
-                                              strokeWidth: 2,
-                                              dashArray: [5, 5],
-                                            ),
-                                            VerticalLine(
-                                              x: t_spiegel,
-                                              color: Colors.black,
-                                              strokeWidth: 2,
-                                              dashArray: [5, 5],
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 4, 0, 0),
+                                                    child: Text(
+                                                        'Spiegel kurz vor erneuter Gabe',
+                                                        style: hintStyle),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
-                                        titlesData: FlTitlesData(
-                                          bottomTitles: AxisTitles(
-                                              sideTitles: SideTitles(
-                                            showTitles: true,
-                                            interval: 2,
-                                            getTitlesWidget: (value, meta) {
-                                              return (Text(
-                                                  value.toStringAsFixed(0),
-                                                  style:
-                                                      TextStyle(fontSize: 10)));
-                                            },
-                                          )),
-                                          leftTitles: AxisTitles(
-                                              sideTitles: SideTitles(
-                                            showTitles: true,
-                                            interval: 2,
-                                            getTitlesWidget: (value, meta) {
-                                              int numberoflabel = 10;
-                                              int labelsteps =
-                                                  (maxY / numberoflabel)
-                                                      .round();
-                                              if (value % labelsteps == 0) {
-                                                return Text(
-                                                  value.toStringAsFixed(0),
-                                                  style:
-                                                      TextStyle(fontSize: 10),
-                                                );
-                                              } else {
-                                                return Text('');
-                                              }
-                                            },
-                                          )),
-                                          topTitles: AxisTitles(
-                                              sideTitles: SideTitles(
-                                                  showTitles: false)),
-                                          rightTitles: AxisTitles(
-                                              sideTitles: SideTitles(
-                                                  showTitles: false)),
-                                        ),
-                                        borderData: FlBorderData(
-                                            border: const Border(
-                                                bottom: BorderSide(),
-                                                left: BorderSide())),
-                                        gridData: FlGridData(
-                                          show: false,
-                                        ),
-                                        minX: 0,
-                                        maxX: maxX,
-                                        minY: 0,
-                                        maxY: maxY,
-                                        lineBarsData: [
-                                          calculatedLineChartData,
-                                          calculatedLineChartData_real,
-                                          calculatedLineChartData_min,
-                                          calculatedLineChartData_max,
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 12, 0, 12),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    calculatedTalspiegel,
+                                                    style: contentStyle,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                         ],
-                                      )),
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ]),
+                        SlideTransition(
+                          position: Tween<Offset>(
+                            begin: Offset(0, 0.4),
+                            end: Offset.zero,
+                          ).animate(_animationcontroller),
+                          child: FadeTransition(
+                            opacity: _animationcontroller,
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 3,
+                                      color: Color(0x33000000),
+                                      offset: Offset(0, 1),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 8),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 12, 0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 12, 12, 0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Steady State',
+                                                    style: headerStyle,
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 4, 0, 0),
+                                                    child: Text(
+                                                      'Steady state erreicht nach',
+                                                      style: hintStyle,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 12, 0, 12),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(duration(),
+                                                      style: contentStyle),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 4, 0, 0),
+                                                    child: Text(
+                                                        'Hinweis: Das Medikament sollte min. 5 HWZ eingenommen worden sein.',
+                                                        style: labelStyle),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SlideTransition(
+                          position: Tween<Offset>(
+                            begin: Offset(0, 0.6),
+                            end: Offset.zero,
+                          ).animate(_animationcontroller),
+                          child: FadeTransition(
+                            opacity: _animationcontroller,
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 3,
+                                      color: Color(0x33000000),
+                                      offset: Offset(0, 1),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 8),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 12, 0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(16, 12, 12, 0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Gabe-Spiegel-Differenz',
+                                                      style: headerStyle,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 4, 0, 0),
+                                                      child: Text(
+                                                        'Stunden zwischen Einnahme und Spiegelbestimmung ',
+                                                        style: hintStyle,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(16, 12, 0, 12),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(differenz + 'h',
+                                                      style: contentStyle),
+                                                  Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 4, 0, 0),
+                                                      child: Text(
+                                                        (int.tryParse(differenz) ??
+                                                                    0) >
+                                                                (verabreichungsintervall)
+                                                            ? "Achtung, die Zeitspanne zwischen Medikationsgabe und Spiegelabnahme ist größer gewählt, als das Verabreichungsintervall von ${widget.textfield_intervall.text}! Bitte kontrollieren!"
+                                                            : "Das festgelegte Verabreichungsintervall beträgt ${widget.textfield_intervall.text}",
+                                                        style: (int.tryParse(
+                                                                        differenz) ??
+                                                                    0) >
+                                                                (verabreichungsintervall)
+                                                            ? importantlabelStyle
+                                                            : labelStyle,
+                                                      )),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SlideTransition(
+                          position: Tween<Offset>(
+                            begin: Offset(0, 0.8),
+                            end: Offset.zero,
+                          ).animate(_animationcontroller),
+                          child: FadeTransition(
+                            opacity: _animationcontroller,
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16, 12, 16, 16),
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 3,
+                                      color: Color(0x33000000),
+                                      offset: Offset(0, 1),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 12),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            16, 12, 0, 0),
+                                        child: Text(
+                                            'Konzentrationsverlauf über Stunden nach Gabe',
+                                            style: headerStyle),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            16, 4, 16, 0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(8, 0, 12, 10),
+                                                child: Wrap(
+                                                  spacing: 8,
+                                                  runSpacing: 4,
+                                                  children: [
+                                                    IconTextRow(
+                                                      iconColor: Colors.black,
+                                                      text: 'Spiegelabnahme',
+                                                    ),
+                                                    IconTextRow(
+                                                      iconColor: Colors.red,
+                                                      text: 'Talspiegel',
+                                                    ),
+                                                    IconTextRow(
+                                                      iconColor: Color.fromARGB(
+                                                          255, 247, 161, 3),
+                                                      text:
+                                                          'Maximales Verteilungsvolumen',
+                                                      icon: Icons.circle,
+                                                    ),
+                                                    IconTextRow(
+                                                      iconColor: Colors.blue,
+                                                      text:
+                                                          'Mittleres Verteilungsvolumen',
+                                                      icon: Icons.circle,
+                                                    ),
+                                                    IconTextRow(
+                                                      iconColor:
+                                                          const Color.fromARGB(
+                                                              255, 50, 114, 52),
+                                                      text:
+                                                          'Minimales Verteilungsvolumen',
+                                                      icon: Icons.circle,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            16, 16, 16, 0),
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 200,
+                                          child: LineChart(LineChartData(
+                                            lineTouchData: LineTouchData(
+                                                touchTooltipData:
+                                                    LineTouchTooltipData(
+                                                        tooltipBgColor:
+                                                            Colors.white)),
+                                            extraLinesData: ExtraLinesData(
+                                              verticalLines: [
+                                                VerticalLine(
+                                                  x: verabreichungsintervall,
+                                                  color: Colors.red,
+                                                  strokeWidth: 2,
+                                                  dashArray: [5, 5],
+                                                ),
+                                                VerticalLine(
+                                                  x: t_spiegel,
+                                                  color: Colors.black,
+                                                  strokeWidth: 2,
+                                                  dashArray: [5, 5],
+                                                ),
+                                              ],
+                                            ),
+                                            titlesData: FlTitlesData(
+                                              bottomTitles: AxisTitles(
+                                                  sideTitles: SideTitles(
+                                                showTitles: true,
+                                                interval: 2,
+                                                getTitlesWidget: (value, meta) {
+                                                  return (Text(
+                                                      value.toStringAsFixed(0),
+                                                      style: TextStyle(
+                                                          fontSize: 10)));
+                                                },
+                                              )),
+                                              leftTitles: AxisTitles(
+                                                  sideTitles: SideTitles(
+                                                showTitles: true,
+                                                interval: 2,
+                                                getTitlesWidget: (value, meta) {
+                                                  int numberoflabel = 10;
+                                                  int labelsteps =
+                                                      (maxY / numberoflabel)
+                                                          .round();
+                                                  if (value % labelsteps == 0) {
+                                                    return Text(
+                                                      value.toStringAsFixed(0),
+                                                      style: TextStyle(
+                                                          fontSize: 10),
+                                                    );
+                                                  } else {
+                                                    return Text('');
+                                                  }
+                                                },
+                                              )),
+                                              topTitles: AxisTitles(
+                                                  sideTitles: SideTitles(
+                                                      showTitles: false)),
+                                              rightTitles: AxisTitles(
+                                                  sideTitles: SideTitles(
+                                                      showTitles: false)),
+                                            ),
+                                            borderData: FlBorderData(
+                                                border: const Border(
+                                                    bottom: BorderSide(),
+                                                    left: BorderSide())),
+                                            gridData: FlGridData(
+                                              show: false,
+                                            ),
+                                            minX: 0,
+                                            maxX: maxX,
+                                            minY: 0,
+                                            maxY: maxY,
+                                            lineBarsData: [
+                                              calculatedLineChartData,
+                                              calculatedLineChartData_real,
+                                              calculatedLineChartData_min,
+                                              calculatedLineChartData_max,
+                                            ],
+                                          )),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+              ),
             ),
           ),
         ),

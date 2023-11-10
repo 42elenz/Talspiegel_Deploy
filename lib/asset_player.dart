@@ -23,6 +23,7 @@ class _AssetPlayerWidgetState extends State<AssetPlayerWidget> {
       })
       ..setLooping(false)
       ..initialize().then((_) {
+        _controller.setVolume(0.0);
         _controller.play();
         setState(() {});
       });
