@@ -18,7 +18,13 @@ Check out the website with an online app and the link to the android store:
 ## Technical
 This App was made with flutter and is easily deployable as a webapp, IOS and Android. 
 
-<img src="https://github.com/42elenz/Talspiegel_Calculator/blob/master/main.jpeg" width="25%">.....<img src="https://github.com/42elenz/Talspiegel_Calculator/blob/master/Example.jpeg" width="25%">
+Change to the branch of your interest to see eather the code for the WebApp or the MobileApp.
+
+
+
+https://github.com/42elenz/Talspiegel_Deploy/assets/87129810/63cb1539-f78c-49fe-b1be-e75da1711732
+
+
 
 ## Acknowledgment
 A project by Dr. Esra Lenz with help from Paul Geeser based on the idea of Dr. Eckermann.
