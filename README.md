@@ -18,6 +18,10 @@ Check out the website with an online app and the link to the android store:
 ## Technical
 This App was made with flutter and is easily deployable as a webapp, IOS and Android. 
 
+
+https://github.com/42elenz/Talspiegel_Deploy/assets/87129810/60bba862-2c67-40fb-bb9f-7fbc4c191aa5
+
+
 <img src="https://github.com/42elenz/Talspiegel_Calculator/blob/master/main.jpeg" width="25%">.....<img src="https://github.com/42elenz/Talspiegel_Calculator/blob/master/Example.jpeg" width="25%">
 
 [![Video](https://github.com/42elenz/Talspiegel_Deploy/blob/master/assets/logo.png)](https://github.com/42elenz/Talspiegel_Deploy/blob/master/assets/tutorial.mp4)
