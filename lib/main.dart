@@ -247,7 +247,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               dropdownItems =
                                                   AntidepressivaItems;
                                               classvalue = 'Antidepressiva';
-                                              
                                             } else if (value ==
                                                 'Antipsychotika') {
                                               dropdownValue = null;
@@ -494,7 +493,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   title:
                                                       Text("Medikationsgabe"),
                                                   content: Text(
-                                                      "Tragen Sie hier den Zeitpunkt der Medikationsgabe ein! Die Medikationsgabe muss zeitlich VOR der Spiegelabnahme liegen. Achtung: Nutzen Sie in der Webversion das Mausrad oder Trackpad!"),
+                                                      "Tragen Sie hier den Zeitpunkt der Medikationsgabe ein! Die Medikationsgabe muss zeitlich VOR der Spiegelabnahme liegen. Aktuell sind nur Zeitpunkte innerhalb der letzten 30 Tage möglich."),
                                                   actions: [
                                                     TextButton(
                                                         onPressed: () {
@@ -592,7 +591,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           236, 149, 204, 252),
                                                   title: Text("Spiegelabnahme"),
                                                   content: Text(
-                                                      "Tragen Sie hier den Zeitpunkt der Spiegelabnahme ein! Die Spiegelabnahme muss zeitlich NACH der Medikationsgabe liegen. Achtung: Nutzen Sie in der Webversion das Mausrad oder Trackpad!"),
+                                                      "Tragen Sie hier den Zeitpunkt der Spiegelabnahme ein! Die Spiegelabnahme muss zeitlich NACH der Medikationsgabe liegen. Aktuell sind nur Zeitpunkte innerhalb der letzten 30 Tage möglich."),
                                                   actions: [
                                                     TextButton(
                                                         onPressed: () {

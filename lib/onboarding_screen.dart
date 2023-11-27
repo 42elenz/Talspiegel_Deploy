@@ -144,13 +144,13 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                   title:
                                       'Verabreichungsabstand und Halbwertszeit',
                                   description:
-                                      'Angabe der Zeit in Stunden zwischen den Einnahmen des Medikaments (z.B. 24h bei einmaliger täglicher Einnahme). Angabe der HWZ.',
+                                      'Angabe der Zeit in Stunden zwischen den Einnahmen des Medikaments (z.B. 24h bei einmaliger täglicher Einnahme). Angabe der HWZ in Stunden.',
                                   imagePath:
                                       'assets/VerabreichungsIntervvall_HWZ.png'),
                               OnBoardingInformationBox(
                                   title: 'Medikametenspiegel bei Abnahme',
                                   description:
-                                      'Gemessene Konzentration bei Abnahme.\n\n',
+                                      'Gemessene Konzentration bei Abnahme in ng/ml.\n\n',
                                   imagePath: 'assets/Spiegel_ct.png'),
                               OnBoardingInformationBox(
                                   title:

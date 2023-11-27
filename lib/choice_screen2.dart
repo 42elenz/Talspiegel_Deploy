@@ -82,7 +82,7 @@ class ChoiceScreen extends StatelessWidget {
                             return AlertDialog(
                               title: Text('Warnung'),
                               content: Text(
-                                'Diese Funktion kann noch nicht verwendet werden! Aktuell ist sie noch experimentell und nicht empfohlen!',
+                                'Diese Funktion kann noch nicht verwendet werden!\nDies wird voraussichtlich nach der Veröffentlichung der neuen Consensus Guideline möglich sein. Für einen früheren Zugang kontaktieren Sie den Entwickler.',
                               ),
                               actions: <Widget>[
                                 TextButton(
@@ -92,20 +92,20 @@ class ChoiceScreen extends StatelessWidget {
                                         .pop(); // Close the dialog
                                   },
                                 ),
-                                TextButton(
-                                  child: Text('Continue'),
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pop(); // Close the dialog
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            EnterDataForm_elimination(),
-                                      ),
-                                    );
-                                  },
-                                ),
+                                // TextButton(
+                                //   child: Text('Continue'),
+                                //   onPressed: () {
+                                //     Navigator.of(context)
+                                //         .pop(); // Close the dialog
+                                //     Navigator.push(
+                                //       context,
+                                //       MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             EnterDataForm_elimination(),
+                                //       ),
+                                //     );
+                                //   },
+                                // ),
                               ],
                             );
                           },
@@ -113,7 +113,7 @@ class ChoiceScreen extends StatelessWidget {
                       },
                       headerText: 'Talspiegelberechnung - Eliminationszeit \n',
                       bodyText:
-                          " Experimentelle Berechnung anhand der Eliminationszeiten und HWZ.Aktuell noch nicht empfohlen.\n",
+                          " Experimentelle Berechnung anhand der Eliminationszeiten und HWZ. Voraussichtlich 2024 zugänglich..\n",
                     ))
               ],
             )),

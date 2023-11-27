@@ -446,7 +446,7 @@ class _EnterDataFormState extends State<EnterDataForm> {
                                             infoText:
                                                 "Die Halbwertszeit (HWZ) gibt an, wie lange es dauert, bis sich die Konzentration eines Medikaments in der Blutbahn halbiert hat. Geben Sie eine eigene HWZ ein oder nutzen Sie die hinterlegte HWZ des Medikaments in Stunden (h).",
                                             onChanged: (p0) => setState(() {}),
-                                            maxLength: 3,
+                                            maxLength: 4,
                                             regExp: floatingRegeEp,
                                             errorText: _hwzError,
                                           ),
@@ -749,7 +749,7 @@ class _EnterDataFormState extends State<EnterDataForm> {
                                           infoText:
                                               "Die Konzentration bei Abnahme in ng/ml ist die Konzentration, welche bei der Blutentnahme festegestellt wurde und auf deren Basis der theoretische Talspiegel berechnet wird.",
                                           onChanged: (p0) => setState(() {}),
-                                          maxLength: 3,
+                                          maxLength: 4,
                                           regExp: floatingRegeEp,
                                           errorText: _spiegelError,
                                         ),
@@ -776,8 +776,28 @@ class _EnterDataFormState extends State<EnterDataForm> {
                                               _spiegelError = "Wert eingeben";
                                               _hasError = true;
                                             }
+                                            if ((double.tryParse(textfield_ct
+                                                        .text
+                                                        .split(' ')[0]) ??
+                                                    1) >
+                                                999.0) {
+                                              textfield_hwz.text = '';
+                                              _spiegelError =
+                                                  "Wert zu groß. Wert < 1000";
+                                              _hasError = true;
+                                            }
                                             if (textfield_hwz.text.isEmpty) {
                                               _hwzError = "Wert eingeben";
+                                              _hasError = true;
+                                            }
+                                            if ((double.tryParse(textfield_hwz
+                                                        .text
+                                                        .split(' ')[0]) ??
+                                                    1) >
+                                                999.0) {
+                                              textfield_hwz.text = '';
+                                              _hwzError =
+                                                  "Wert zu groß. Wert < 1000";
                                               _hasError = true;
                                             }
                                             if (textfield_tmin.text.isEmpty) {
